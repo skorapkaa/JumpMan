@@ -10,9 +10,14 @@ class Character:
         self.gravity = 0.5
         self.on_ground = False
         self.facing_direction = "right"
+        
+        # Načteme obrázek pro postavu
+        self.image = pygame.image.load("assets/sprites/character_sprites/stand_sprite.png")  # Zde použij svůj obrázek postavy
+        self.image = pygame.transform.scale(self.image, (40, 60))  # Změníme velikost, pokud je potřeba
 
     def draw(self, screen):
-        pygame.draw.rect(screen, (0, 0, 255), self.get_rect())
+        # Vykreslíme obrázek na obrazovku
+        screen.blit(self.image, self.get_rect())
 
     def get_rect(self):
         return pygame.Rect(self.x, self.y, 40, 60)

@@ -1,0 +1,4 @@
+tmave modra/ 000b80
+svetlejsi modra/ 1960fa
+bleda modra/ 4a81f7
+svetla modra/ 00c3ff
