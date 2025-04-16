@@ -15,7 +15,6 @@ class MainGame:
         pygame.display.set_caption("Jumper")
         self.clock = pygame.time.Clock()
 
-        # Načti zvuky a pozadí pouze jednou
         self.menu_birds_sfx = pygame.mixer.Sound("assets/sounds/birds.wav")
         self.menu_pop_btn_sfx = pygame.mixer.Sound("assets/sounds/pop.wav")
         self.menu_pop_btn_sfx.set_volume(0.2)
@@ -115,7 +114,6 @@ class MainGame:
             self.clock.tick(60)
 
     def menu(self):
-        # Spusť hudbu pokud ještě nehraje
         if not pygame.mixer.get_busy():
             self.menu_birds_sfx.play(loops=-1)
 
@@ -165,7 +163,7 @@ class MainGame:
                         self.menu_pop_btn_sfx.play()
                         self.menu_birds_sfx.stop()
                         self.play()
-                        self.menu_birds_sfx.play(loops=-1)  # znovu zapni po návratu
+                        self.menu_birds_sfx.play(loops=-1)
                     if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
                         self.menu_pop_btn_sfx.play()
                         self.options()

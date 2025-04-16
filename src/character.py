@@ -11,15 +11,14 @@ class Character:
         self.on_ground = False
         self.facing_direction = "right"
         
-        # Načteme obrázek pro postavu
-        self.character_stand_right = pygame.image.load("assets/sprites/character_sprites/stand_sprite_right.png")  # Zde použij svůj obrázek postavy
-        self.character_stand_right = pygame.transform.scale(self.character_stand_right, (40, 60))  # Změníme velikost, pokud je potřeba
 
-        self.character_stand_left = pygame.image.load("assets/sprites/character_sprites/stand_sprite_left.png")  # Zde použij svůj obrázek postavy
-        self.character_stand_left = pygame.transform.scale(self.character_stand_left, (40, 60))  # Změníme velikost, pokud je potřeba
+        self.character_stand_right = pygame.image.load("assets/sprites/character_sprites/stand_sprite_right.png") 
+        self.character_stand_right = pygame.transform.scale(self.character_stand_right, (40, 60))
+
+        self.character_stand_left = pygame.image.load("assets/sprites/character_sprites/stand_sprite_left.png") 
+        self.character_stand_left = pygame.transform.scale(self.character_stand_left, (40, 60))
 
     def draw(self, screen):
-        # Vykreslíme obrázek na obrazovku
         if self.facing_direction == "right":
             screen.blit(self.character_stand_right, (self.x, self.y))
         else:
@@ -32,7 +31,7 @@ class Character:
         self.velocity_y += self.gravity
         self.y += self.velocity_y
 
-        # Zabraň opuštění obrazovky (x)
+        #postava neopustí obrazovku
         self.x = max(0, min(self.x, 800 - 40))
 
     def move(self, direction):
