@@ -12,12 +12,18 @@ class Character:
         self.facing_direction = "right"
         
         # Načteme obrázek pro postavu
-        self.image = pygame.image.load("assets/sprites/character_sprites/stand_sprite.png")  # Zde použij svůj obrázek postavy
-        self.image = pygame.transform.scale(self.image, (40, 60))  # Změníme velikost, pokud je potřeba
+        self.character_stand_right = pygame.image.load("assets/sprites/character_sprites/stand_sprite_right.png")  # Zde použij svůj obrázek postavy
+        self.character_stand_right = pygame.transform.scale(self.character_stand_right, (40, 60))  # Změníme velikost, pokud je potřeba
+
+        self.character_stand_left = pygame.image.load("assets/sprites/character_sprites/stand_sprite_left.png")  # Zde použij svůj obrázek postavy
+        self.character_stand_left = pygame.transform.scale(self.character_stand_left, (40, 60))  # Změníme velikost, pokud je potřeba
 
     def draw(self, screen):
         # Vykreslíme obrázek na obrazovku
-        screen.blit(self.image, self.get_rect())
+        if self.facing_direction == "right":
+            screen.blit(self.character_stand_right, (self.x, self.y))
+        else:
+            screen.blit(self.character_stand_left, (self.x, self.y))
 
     def get_rect(self):
         return pygame.Rect(self.x, self.y, 40, 60)

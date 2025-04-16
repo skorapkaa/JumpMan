@@ -28,6 +28,10 @@ class MainGame:
         paused = False
         player = Player()
         ground = [pygame.Rect(0, 500, 800, 100)]  # základní zem
+        background = pygame.transform.scale(pygame.image.load("assets/sprites/game_sprites/background_game.png"), (800,600))
+
+        self.menu_birds_sfx.stop()
+        self.menu_birds_sfx.play(loops=-1)
 
         RETURN_BUTTON = Button(
             image=pygame.image.load("assets/sprites/menu_sprites/Options Rect.png"),
@@ -39,6 +43,7 @@ class MainGame:
         )
 
         while screen_run:
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -56,11 +61,11 @@ class MainGame:
                 player.update()
                 player.checkColisions([], ground)
 
-            self.SCREEN.fill((255, 255, 255))  # bílé pozadí
+            self.SCREEN.blit(background, (0,0))
 
             # Vykresli zem
             for rect in ground:
-                pygame.draw.rect(self.SCREEN, (0, 200, 0), rect)
+                pygame.draw.rect(self.SCREEN, (139, 69, 19), rect)
 
             # Vykresli hráče
             player.draw(self.SCREEN)
