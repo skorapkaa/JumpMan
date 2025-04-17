@@ -17,7 +17,7 @@ class MainGame:
         self.WIDTH = 800
         self.HEIGHT = 600
         self.SCREEN = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
-        pygame.display.set_caption("Jumper")
+        pygame.display.set_caption("Muz na nakupech")
         self.clock = pygame.time.Clock()
 
         self.menu_birds_sfx = pygame.mixer.Sound("../assets/sounds/birds.wav")
