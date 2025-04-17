@@ -1,3 +1,7 @@
+"""
+...main
+"""
+
 from maingame import MainGame
 
 if __name__ == "__main__":

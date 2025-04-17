@@ -30,8 +30,6 @@ class Character:
     def update(self):
         self.velocity_y += self.gravity
         self.y += self.velocity_y
-
-        # postava neopustí obrazovku
         self.x = max(0, min(self.x, 800 - 40))
 
     def move(self, direction):
