@@ -64,7 +64,7 @@ class MainGame:
             if not paused:
                 player.handle_input()
                 player.update()
-                player.checkColisions([], ground)
+                player.check_collisions([], ground)
 
             self.SCREEN.blit(background, (0, 0))
 
