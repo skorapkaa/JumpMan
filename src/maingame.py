@@ -31,9 +31,8 @@ class MainGame:
         screen_run = True
         paused = False
         player = Player()
-        ground = [pygame.Rect(0, 500, 800, 100)]  # základní zem
-        background = pygame.transform.scale(pygame.image.load("../assets/sprites/game_sprites/background_game.png"),
-                                            (800, 600))
+        ground = [pygame.Rect(0, 500, 800, 100)]
+        background = pygame.transform.scale(pygame.image.load("../assets/sprites/game_sprites/background_game.png"), (800, 600))
 
         self.menu_birds_sfx.stop()
         self.menu_birds_sfx.play(loops=-1)
@@ -59,7 +58,7 @@ class MainGame:
                 if paused and event.type == pygame.MOUSEBUTTONDOWN:
                     if RETURN_BUTTON.checkForInput(pygame.mouse.get_pos()):
                         self.menu_pop_btn_sfx.play()
-                        return  # návrat do menu
+                        return
 
             if not paused:
                 player.handle_input()
@@ -68,20 +67,16 @@ class MainGame:
 
             self.SCREEN.blit(background, (0, 0))
 
-            # Vykresli zem
             for rect in ground:
                 pygame.draw.rect(self.SCREEN, (139, 69, 19), rect)
 
-            # Vykresli hráče
             player.draw(self.SCREEN)
 
-            # Pokud je pauza, vykresli tlačítko
             if paused:
                 pause_text = get_font(80).render("PAUSED", True, "#FF0000")
                 pause_rect = pause_text.get_rect(center=(self.WIDTH // 2, 150))
                 self.SCREEN.blit(pause_text, pause_rect)
 
-                # Vykresli tlačítko návratu do menu
                 RETURN_BUTTON.changeColor(pygame.mouse.get_pos())
                 RETURN_BUTTON.update(self.SCREEN)
 
