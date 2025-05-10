@@ -1,11 +1,13 @@
 import pygame
+
 from character import Character
+
 
 class Player(Character):
     def __init__(self):
         super().__init__()
 
-    def checkColisions(self, items, terrain):
+    def check_collisions(self, items, terrain):
         self.check_collision(terrain)
         for item in items:
             if self.get_rect().colliderect(item.itemBounds):
