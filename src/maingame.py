@@ -4,12 +4,13 @@ import pygame
 
 from button import Button
 from player import Player
+from terrain import Terrain
 
 pygame.init()
 
 
 def get_font(size):
-    return pygame.font.Font("../assets/fonts/chrustyrock.ttf", size)
+    return pygame.font.Font("assets/fonts/chrustyrock.ttf", size)
 
 
 class MainGame:
@@ -20,26 +21,27 @@ class MainGame:
         pygame.display.set_caption("Jumper")
         self.clock = pygame.time.Clock()
 
-        self.menu_birds_sfx = pygame.mixer.Sound("../assets/sounds/birds.wav")
-        self.menu_pop_btn_sfx = pygame.mixer.Sound("../assets/sounds/pop.wav")
+        self.menu_birds_sfx = pygame.mixer.Sound("assets/sounds/birds.wav")
+        self.menu_pop_btn_sfx = pygame.mixer.Sound("assets/sounds/pop.wav")
         self.menu_pop_btn_sfx.set_volume(0.2)
         self.menu_background = pygame.transform.scale(
-            pygame.image.load("../assets/sprites/menu_sprites/background_menu.png").convert(), (800, 600)
+            pygame.image.load("assets/sprites/menu_sprites/background_menu.png").convert(), (800, 600)
         )
 
-    def play(self):
+    def play(self, difficulty="easy"):
         screen_run = True
         paused = False
         player = Player()
-        ground = [pygame.Rect(0, 500, 800, 100)]  # základní zem
-        background = pygame.transform.scale(pygame.image.load("../assets/sprites/game_sprites/background_game.png"),
+        terrain = Terrain()
+        ground = terrain.get_map(difficulty)  # základní zem
+        background = pygame.transform.scale(pygame.image.load("assets/sprites/game_sprites/background_game.png"),
                                             (800, 600))
 
         self.menu_birds_sfx.stop()
         self.menu_birds_sfx.play(loops=-1)
 
         RETURN_BUTTON = Button(
-            image=pygame.image.load("../assets/sprites/menu_sprites/Options Rect.png"),
+            image=pygame.image.load("assets/sprites/menu_sprites/Options Rect.png"),
             pos=(400, 300),
             text_input="RETURN TO MENU",
             font=get_font(40),
@@ -63,35 +65,39 @@ class MainGame:
 
             if not paused:
                 player.handle_input()
-                player.update()
-                player.check_collisions([], ground)
+                player.update(ground)
+
+            if not player.alive:
+                print("propast")
+                pygame.time.wait(500)
+                player = Player()
+                terrain = Terrain()
+                ground = terrain.get_map(difficulty)
 
             self.SCREEN.blit(background, (0, 0))
 
-            # Vykresli zem
             for rect in ground:
                 pygame.draw.rect(self.SCREEN, (139, 69, 19), rect)
 
-            # Vykresli hráče
             player.draw(self.SCREEN)
 
-            # Pokud je pauza, vykresli tlačítko
             if paused:
                 pause_text = get_font(80).render("PAUSED", True, "#FF0000")
                 pause_rect = pause_text.get_rect(center=(self.WIDTH // 2, 150))
                 self.SCREEN.blit(pause_text, pause_rect)
 
-                # Vykresli tlačítko návratu do menu
                 RETURN_BUTTON.changeColor(pygame.mouse.get_pos())
                 RETURN_BUTTON.update(self.SCREEN)
 
             pygame.display.update()
             self.clock.tick(60)
 
+
+
     def options(self):
         screen_run = True
         BACK_BUTTON = Button(
-            image=pygame.image.load("../assets/sprites/menu_sprites/Play Rect.png"),
+            image=pygame.image.load("assets/sprites/menu_sprites/Play Rect.png"),
             pos=(400, 250),
             text_input="BACK",
             font=get_font(60),
@@ -131,7 +137,7 @@ class MainGame:
             self.SCREEN.blit(MENU_TEXT, MENU_RECT)
 
             PLAY_BUTTON = Button(
-                image=pygame.image.load("../assets/sprites/menu_sprites/Play Rect.png"),
+                image=pygame.image.load("assets/sprites/menu_sprites/Play Rect.png"),
                 pos=(400, 250),
                 text_input="PLAY",
                 font=get_font(60),
@@ -139,7 +145,7 @@ class MainGame:
                 hovering_color="White"
             )
             OPTIONS_BUTTON = Button(
-                image=pygame.image.load("../assets/sprites/menu_sprites/Options Rect.png"),
+                image=pygame.image.load("assets/sprites/menu_sprites/Options Rect.png"),
                 pos=(400, 400),
                 text_input="OPTIONS",
                 font=get_font(50),
@@ -147,7 +153,7 @@ class MainGame:
                 hovering_color="White"
             )
             QUIT_BUTTON = Button(
-                image=pygame.image.load("../assets/sprites/menu_sprites/Quit Rect.png"),
+                image=pygame.image.load("assets/sprites/menu_sprites/Quit Rect.png"),
                 pos=(400, 550),
                 text_input="QUIT",
                 font=get_font(50),
