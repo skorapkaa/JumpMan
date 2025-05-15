@@ -28,14 +28,22 @@ class MainGame:
             pygame.image.load("assets/sprites/menu_sprites/background_menu.png").convert(), (800, 600)
         )
 
-    def play(self, difficulty="easy"):
+    def play(self, difficulty="medium"):
         screen_run = True
         paused = False
         player = Player()
         terrain = Terrain()
-        ground = terrain.get_map(difficulty)  # základní zem
-        background = pygame.transform.scale(pygame.image.load("assets/sprites/game_sprites/background_game.png"),
-                                            (800, 600))
+        terrain_data = terrain.get_map(difficulty)
+        ground_rects = terrain_data["ground_rects"]
+        platform_rects = terrain_data["platform_rects"]
+
+        background = pygame.image.load("assets/sprites/game_sprites/background.png").convert()
+        background_width = background.get_width()
+
+        ground_texture = pygame.image.load("assets/sprites/game_sprites/ground.png").convert_alpha()
+        ground_texture = pygame.transform.scale(ground_texture, (64, 64))  #zvetsnei textury pro zem
+
+        platform_texture_original = pygame.image.load("assets/sprites/game_sprites/platform.png").convert_alpha()
 
         self.menu_birds_sfx.stop()
         self.menu_birds_sfx.play(loops=-1)
@@ -48,6 +56,8 @@ class MainGame:
             base_color="#1C86E5",
             hovering_color="White"
         )
+
+        scroll_x = 0
 
         while screen_run:
 
@@ -64,22 +74,41 @@ class MainGame:
                         return  # návrat do menu
 
             if not paused:
-                player.handle_input()
-                player.update(ground)
+                player.handle_input(offset_x=scroll_x, screen_width=self.WIDTH)
+                player.update(ground_rects + platform_rects)
 
             if not player.alive:
                 print("propast")
                 pygame.time.wait(500)
                 player = Player()
                 terrain = Terrain()
-                ground = terrain.get_map(difficulty)
+                terrain_data = terrain.get_map(difficulty)
+                ground_rects = terrain_data["ground_rects"]
+                platform_rects = terrain_data["platform_rects"]
 
-            self.SCREEN.blit(background, (0, 0))
+            scroll_x = max(0, min(player.x - self.WIDTH // 2, background_width - self.WIDTH))
 
-            for rect in ground:
-                pygame.draw.rect(self.SCREEN, (139, 69, 19), rect)
+            self.SCREEN.blit(background, (-scroll_x, 0))
 
-            player.draw(self.SCREEN)
+
+            for rect in ground_rects:
+                tiles_x = rect.width // ground_texture.get_width() + 1
+                tiles_y = rect.height // ground_texture.get_height() + 1
+
+                for x in range(tiles_x):
+                    for y in range(tiles_y):
+                        pos_x = rect.x + x * ground_texture.get_width() - scroll_x
+                        pos_y = rect.y + y * ground_texture.get_height()
+                        self.SCREEN.blit(ground_texture, (pos_x, pos_y))
+
+            # VYKRESLENÍ PLATFOREM
+            for rect in platform_rects:
+                platform_texture = pygame.transform.scale(platform_texture_original, (rect.width, rect.height))
+                self.SCREEN.blit(platform_texture, (rect.x - scroll_x, rect.y))
+
+
+            # VYKRESLENÍ HRÁČE
+            player.draw(self.SCREEN, scroll_x)
 
             if paused:
                 pause_text = get_font(80).render("PAUSED", True, "#FF0000")
@@ -91,6 +120,8 @@ class MainGame:
 
             pygame.display.update()
             self.clock.tick(60)
+
+
 
 
 

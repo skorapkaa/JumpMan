@@ -18,11 +18,11 @@ class Character:
         self.character_stand_left = pygame.image.load("assets/sprites/character_sprites/stand_sprite_left.png")
         self.character_stand_left = pygame.transform.scale(self.character_stand_left, (40, 60))
 
-    def draw(self, screen):
+    def draw(self, screen, offset_x=0):
         if self.facing_direction == "right":
-            screen.blit(self.character_stand_right, (self.x, self.y))
+            screen.blit(self.character_stand_right, (self.x - offset_x, self.y))
         else:
-            screen.blit(self.character_stand_left, (self.x, self.y))
+            screen.blit(self.character_stand_left, (self.x - offset_x, self.y))
 
     def get_rect(self):
         return pygame.Rect(self.x, self.y, 40, 60)
@@ -58,16 +58,19 @@ class Character:
         if self.y > 700:
             self.alive = False
         
-              
+                
 
 
-    def move(self, direction):
+    def move(self, direction, screen_width=800, offset_x=0):
+        max_x_on_screen = offset_x + screen_width - 40  # 40 = šířka hráče
         if direction == "left" and self.x > 0:
             self.x -= self.speed
             self.facing_direction = "left"
-        elif direction == "right" and self.x < 760:
-            self.x += self.speed
-            self.facing_direction = "right"
+        elif direction == "right":
+            # zamezíme aby hráč překročil pravý okraj viditelné obrazovky
+            if self.x + self.speed < max_x_on_screen:
+                self.x += self.speed
+                self.facing_direction = "right"
 
     def jump(self):
         if self.on_ground:

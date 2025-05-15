@@ -13,11 +13,12 @@ class Player(Character):
             if self.get_rect().colliderect(item.itemBounds):
                 item.collectItem()
 
-    def handle_input(self):
+
+    def handle_input(self, offset_x=0, screen_width=800):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            self.move("left")
-        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            self.move("right")
-        if keys[pygame.K_w] or keys[pygame.K_UP]:
+        if keys[pygame.K_LEFT]:
+            self.move("left", screen_width, offset_x)
+        if keys[pygame.K_RIGHT]:
+            self.move("right", screen_width, offset_x)
+        if keys[pygame.K_SPACE] or keys[pygame.K_UP]:
             self.jump()
