@@ -29,37 +29,42 @@ class Character:
 
     def update(self, terrain):
         self.on_ground = False
+
+        # Nejprve zpracujeme horizontální pohyb
         self.x += self.velocity_x
         player_rect = self.get_rect()
-        
+
         for rect in terrain:
             if player_rect.colliderect(rect):
-                if self.velocity_x > 0:
+                if self.velocity_x > 0:  # Pohyb doprava
                     self.x = rect.left - player_rect.width
-                elif self.velocity_x < 0:
+                elif self.velocity_x < 0:  # Pohyb doleva
                     self.x = rect.right
                 self.velocity_x = 0
-                player_rect = self.get_rect()
+                player_rect = self.get_rect()  # Aktualizace obdélníku po změně pozice
 
+        # Aplikujeme gravitaci a zpracujeme vertikální pohyb
         self.velocity_y += self.gravity
         self.y += self.velocity_y
         player_rect = self.get_rect()
 
+        # Uložíme předchozí vertikální pozici pro určení směru kolize
+        prev_bottom = player_rect.bottom - self.velocity_y
+
         for rect in terrain:
             if player_rect.colliderect(rect):
-                if self.velocity_y > 0:
+                # Kolize shora (hráč padá na platformu)
+                if prev_bottom <= rect.top + 10:  # Malá tolerance pro lepší herní pocit
                     self.y = rect.top - player_rect.height
                     self.velocity_y = 0
                     self.on_ground = True
-                elif self.velocity_y < 0:
+                # Kolize zespodu (hráč skáče do platformy)
+                elif player_rect.top < rect.bottom and self.velocity_y < 0:
                     self.y = rect.bottom
                     self.velocity_y = 0
-                    
+
         if self.y > 700:
             self.alive = False
-        
-                
-
 
     def move(self, direction, screen_width=800, offset_x=0):
         max_x_on_screen = offset_x + screen_width - 40  # 40 = šířka hráče
@@ -76,5 +81,3 @@ class Character:
         if self.on_ground:
             self.velocity_y = -10
             self.on_ground = False
-
-
