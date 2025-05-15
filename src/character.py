@@ -41,16 +41,17 @@ class Character:
                 elif self.velocity_x < 0:  # Pohyb doleva
                     self.x = rect.right
                 self.velocity_x = 0
-                player_rect = self.get_rect()  # Aktualizace obdélníku po změně pozice
+                player_rect = self.get_rect()  # Aktualizace po změně pozice
 
-        # Aplikujeme gravitaci a zpracujeme vertikální pohyb
+        # gravitace a zpravání vertikálního pohybu
         self.velocity_y += self.gravity
         self.y += self.velocity_y
         player_rect = self.get_rect()
 
-        # Uložíme předchozí vertikální pozici pro určení směru kolize
+        # Uložení předchozí vertikální pozice pro určení směru kolize
         prev_bottom = player_rect.bottom - self.velocity_y
 
+        # Kontrola kolizí s terénem, nešahat!!
         for rect in terrain:
             if player_rect.colliderect(rect):
                 # Kolize shora (hráč padá na platformu)
@@ -72,7 +73,7 @@ class Character:
             self.x -= self.speed
             self.facing_direction = "left"
         elif direction == "right":
-            # zamezíme aby hráč překročil pravý okraj viditelné obrazovky
+            # zamezí aby hráč překročil pravý okraj viditelné obrazovky
             if self.x + self.speed < max_x_on_screen:
                 self.x += self.speed
                 self.facing_direction = "right"

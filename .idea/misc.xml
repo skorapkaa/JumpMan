@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Black">
+    <option name="sdkName" value="Python 3.13" />
+  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.13" project-jdk-type="Python SDK" />
+  <component name="RuffConfigService">
+    <option name="alwaysUseGlobalRuff" value="true" />
+    <option name="globalRuffExecutablePath" value="$USER_HOME$/.pyenv/shims/ruff" />
+    <option name="globalRuffLspExecutablePath" value="$USER_HOME$/.pyenv/shims/ruff-lsp" />
+    <option name="runRuffOnSave" value="true" />
+    <option name="useIntellijLspClient" value="false" />
+    <option name="useLsp4ij" value="true" />
+    <option name="useRuffFormat" value="true" />
+    <option name="useRuffServer" value="true" />
+  </component>
+</project>
