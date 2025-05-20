@@ -33,6 +33,7 @@ class MainGame:
         player = Player()
         terrain = Terrain()
         terrain_data = terrain.get_map(difficulty)
+        score = 0
 
         ground_rects = terrain_data["ground_rects"]
         platform_rects = terrain_data["platform_rects"]
@@ -93,6 +94,7 @@ class MainGame:
                 platform_rects = terrain_data["platform_rects"]
                 item_rects = terrain_data["items"]
                 boost_rects = terrain_data["boosts"]
+                score = 0
 
             scroll_x = max(0, min(player.x - self.WIDTH // 2, background_width - self.WIDTH))
             self.SCREEN.blit(background, (-scroll_x, 0))
@@ -112,15 +114,37 @@ class MainGame:
                 platform_texture = pygame.transform.scale(platform_texture_original, (rect.width, rect.height))
                 self.SCREEN.blit(platform_texture, (rect.x - scroll_x, rect.y))
 
-            # Vykreslení mincí (itemů)
-            for coin in item_rects:
-                self.SCREEN.blit(item_texture, (coin.x - scroll_x, coin.y))
+            # Vykreslení mincí a podminka pro jejich sebrani
+            for coin in item_rects[:]:
+                if player.get_rect().colliderect(coin):
+                    item_rects.remove(coin)
+                    score += 1
+                else:
+                    self.SCREEN.blit(item_texture, (coin.x - scroll_x, coin.y))
 
+            # Vykresleni boostu
             for boost in boost_rects:
-                self.SCREEN.blit(boost_texture, (boost.x - scroll_x, boost.y))    
+                if player.get_rect().colliderect(boost):
+                    boost_rects.remove(boost)    
+                    player.jump_boost_end_time = pygame.time.get_ticks() + 5000  # boost na 5 sekund
+                else:
+                    self.SCREEN.blit(boost_texture, (boost.x - scroll_x, boost.y))    
 
             # Vykreslení hráče
             player.draw(self.SCREEN, scroll_x)
+
+            #Vykresleni skore. MIZI OPRAVIT !
+            score_text = get_font(30).render(f"Score: {score}", True, "#FFFFFF")
+            self.SCREEN.blit(score_text, (30, 30))
+
+            # Vykresleni casu pro boost
+            current_time = pygame.time.get_ticks()
+            if player.jump_boost_end_time > current_time:
+                remaining_ms = player.jump_boost_end_time - current_time
+                remaining_seconds = round(remaining_ms / 1000, 1)
+                boost_text = get_font(30).render(f"Boost: {remaining_seconds}s", True, "#FFD700")
+                self.SCREEN.blit(boost_text, (30, 70))
+
 
             # Pauza
             if paused:
