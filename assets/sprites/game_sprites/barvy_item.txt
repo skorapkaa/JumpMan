@@ -1,0 +1,9 @@
+coiny:
+    hneda 6b5733
+    tmave hneda 381b00
+    zlata e3c04d
+    bezova edd587
+
+boost:
+    tmave fialova 3f1045   
+    svetle fialova 9f26f0 
