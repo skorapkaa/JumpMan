@@ -6,6 +6,7 @@ from character import Character
 class Player(Character):
     def __init__(self):
         super().__init__()
+        self.jump_boost_end_time = 0  # čas na boost
 
     def check_collisions(self, items, terrain):
         self.check_collision(terrain)
@@ -22,3 +23,12 @@ class Player(Character):
             self.move("right", screen_width, offset_x)
         if keys[pygame.K_SPACE] or keys[pygame.K_UP]:
             self.jump()
+
+    def jump(self):
+        current_time = pygame.time.get_ticks()
+        if self.on_ground:
+            if current_time < self.jump_boost_end_time:
+                self.velocity_y = -18  # Boost skok
+            else:
+                self.velocity_y = -10  # normální skok
+            self.on_ground = False
