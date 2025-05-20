@@ -1,5 +1,4 @@
 import sys
-
 import pygame
 
 from button import Button
@@ -8,10 +7,8 @@ from terrain import Terrain
 
 pygame.init()
 
-
 def get_font(size):
     return pygame.font.Font("assets/fonts/chrustyrock.ttf", size)
-
 
 class MainGame:
     def __init__(self):
@@ -24,8 +21,10 @@ class MainGame:
         self.menu_birds_sfx = pygame.mixer.Sound("assets/sounds/birds.wav")
         self.menu_pop_btn_sfx = pygame.mixer.Sound("assets/sounds/pop.wav")
         self.menu_pop_btn_sfx.set_volume(0.2)
+
         self.menu_background = pygame.transform.scale(
-            pygame.image.load("assets/sprites/menu_sprites/background_menu.png").convert(), (800, 600)
+            pygame.image.load("assets/sprites/menu_sprites/background_menu.png").convert(),
+            (800, 600)
         )
 
     def play(self, difficulty="medium"):
@@ -34,16 +33,25 @@ class MainGame:
         player = Player()
         terrain = Terrain()
         terrain_data = terrain.get_map(difficulty)
+
         ground_rects = terrain_data["ground_rects"]
         platform_rects = terrain_data["platform_rects"]
+        item_rects = terrain_data["items"]
+        boost_rects = terrain_data["boosts"]
 
         background = pygame.image.load("assets/sprites/game_sprites/background.png").convert()
         background_width = background.get_width()
 
         ground_texture = pygame.image.load("assets/sprites/game_sprites/ground.png").convert_alpha()
-        ground_texture = pygame.transform.scale(ground_texture, (64, 64))  #zvetsnei textury pro zem
+        ground_texture = pygame.transform.scale(ground_texture, (64, 64))
 
         platform_texture_original = pygame.image.load("assets/sprites/game_sprites/platform.png").convert_alpha()
+
+        item_texture = pygame.image.load("assets/sprites/game_sprites/item.png").convert_alpha()
+        item_texture = pygame.transform.scale(item_texture, (32,32))
+
+        boost_texture = pygame.image.load("assets/sprites/game_sprites/boost.png").convert_alpha()
+        boost_texture = pygame.transform.scale(boost_texture, (32,32))
 
         self.menu_birds_sfx.stop()
         self.menu_birds_sfx.play(loops=-1)
@@ -60,14 +68,12 @@ class MainGame:
         scroll_x = 0
 
         while screen_run:
-
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        paused = not paused
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    paused = not paused
                 if paused and event.type == pygame.MOUSEBUTTONDOWN:
                     if RETURN_BUTTON.checkForInput(pygame.mouse.get_pos()):
                         self.menu_pop_btn_sfx.play()
@@ -85,31 +91,38 @@ class MainGame:
                 terrain_data = terrain.get_map(difficulty)
                 ground_rects = terrain_data["ground_rects"]
                 platform_rects = terrain_data["platform_rects"]
+                item_rects = terrain_data["items"]
+                boost_rects = terrain_data["boosts"]
 
             scroll_x = max(0, min(player.x - self.WIDTH // 2, background_width - self.WIDTH))
-
             self.SCREEN.blit(background, (-scroll_x, 0))
 
-
+            # Vykreslení země
             for rect in ground_rects:
                 tiles_x = rect.width // ground_texture.get_width() + 1
                 tiles_y = rect.height // ground_texture.get_height() + 1
-
                 for x in range(tiles_x):
                     for y in range(tiles_y):
                         pos_x = rect.x + x * ground_texture.get_width() - scroll_x
                         pos_y = rect.y + y * ground_texture.get_height()
                         self.SCREEN.blit(ground_texture, (pos_x, pos_y))
 
-            # VYKRESLENÍ PLATFOREM
+            # Vykreslení platforem
             for rect in platform_rects:
                 platform_texture = pygame.transform.scale(platform_texture_original, (rect.width, rect.height))
                 self.SCREEN.blit(platform_texture, (rect.x - scroll_x, rect.y))
 
+            # Vykreslení mincí (itemů)
+            for coin in item_rects:
+                self.SCREEN.blit(item_texture, (coin.x - scroll_x, coin.y))
 
-            # VYKRESLENÍ HRÁČE
+            for boost in boost_rects:
+                self.SCREEN.blit(boost_texture, (boost.x - scroll_x, boost.y))    
+
+            # Vykreslení hráče
             player.draw(self.SCREEN, scroll_x)
 
+            # Pauza
             if paused:
                 pause_text = get_font(80).render("PAUSED", True, "#FF0000")
                 pause_rect = pause_text.get_rect(center=(self.WIDTH // 2, 150))
@@ -120,10 +133,6 @@ class MainGame:
 
             pygame.display.update()
             self.clock.tick(60)
-
-
-
-
 
     def options(self):
         screen_run = True
@@ -146,7 +155,7 @@ class MainGame:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if BACK_BUTTON.checkForInput(MOUSE_POS):
                         self.menu_pop_btn_sfx.play()
-                        return  # návrat zpět do menu
+                        return
 
             self.SCREEN.fill((0, 0, 255))
             BACK_BUTTON.changeColor(MOUSE_POS)
