@@ -10,12 +10,12 @@ os.environ['SDL_VIDEO_CENTERED'] = '1'      #toto nam umozni menit rozliseni bez
 pygame.init()
 
 def get_font(size):
-    return pygame.font.Font("assets/fonts/PlayfulTime.ttf", size)
+    return pygame.font.Font("assets/fonts/Lana Turner.ttf", size)
 
 class MainGame:
     def __init__(self):
-        self.WIDTH = 800
-        self.HEIGHT = 600
+        self.WIDTH = 1280
+        self.HEIGHT = 720
         self.SCREEN = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         pygame.display.set_caption("Jumper")
         self.clock = pygame.time.Clock()
@@ -156,7 +156,7 @@ class MainGame:
             # Vykreslení hráče
             player.draw(self.SCREEN, scroll_x)
 
-            #Vykresleni skore. MIZI OPRAVIT !
+            #Vykresleni skore
             score_text = get_font(30).render(f"Score: {score}", True, "#FFFFFF")
             self.SCREEN.blit(score_text, (30, 30))
 
@@ -264,16 +264,17 @@ class MainGame:
             self.SCREEN.blit(self.scaled_background, (0, 0))
             MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-            MENU_TEXT = get_font(100).render("MAIN MENU", True, "#04049B")
+            MENU_TEXT = get_font(150).render("JUMPMAN", True, "#04049B")
             MENU_RECT = MENU_TEXT.get_rect(center=(self.WIDTH // 2, 100))
             self.SCREEN.blit(MENU_TEXT, MENU_RECT)
+
 
             PLAY_BUTTON = Button(
                 image=pygame.image.load("assets/sprites/menu_sprites/Play Rect.png"),
                 pos=(self.WIDTH//2, 250),
                 text_input="PLAY",
                 font=get_font(60),
-                base_color="#1C86E5",
+                base_color="#CDE3F7",
                 hovering_color="White"
             )
             OPTIONS_BUTTON = Button(
@@ -281,7 +282,7 @@ class MainGame:
                 pos=(self.WIDTH//2, 400),
                 text_input="OPTIONS",
                 font=get_font(50),
-                base_color="#1C86E5",
+                base_color="#CDE3F7",
                 hovering_color="White"
             )
             QUIT_BUTTON = Button(
@@ -289,7 +290,7 @@ class MainGame:
                 pos=(self.WIDTH//2, 550),
                 text_input="QUIT",
                 font=get_font(50),
-                base_color="#1C86E5",
+                base_color="#CDE3F7",
                 hovering_color="White"
             )
 
