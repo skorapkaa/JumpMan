@@ -77,8 +77,3 @@ class Character:
             if self.x + self.speed < max_x_on_screen:
                 self.x += self.speed
                 self.facing_direction = "right"
-
-    def jump(self):
-        if self.on_ground:
-            self.velocity_y = -10
-            self.on_ground = False
