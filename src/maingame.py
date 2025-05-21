@@ -4,6 +4,7 @@ import pygame
 from button import Button
 from player import Player
 from terrain import Terrain
+from items import Items
 import os
 os.environ['SDL_VIDEO_CENTERED'] = '1'      #toto nam umozni menit rozliseni bez pohybu okna
 
@@ -58,8 +59,10 @@ class MainGame:
 
         ground_rects = terrain_data["ground_rects"]
         platform_rects = terrain_data["platform_rects"]
-        item_rects = terrain_data["items"]
-        boost_rects = terrain_data["boosts"]
+
+        items = Items()
+        item_rects, boost_rects = items.get_items_and_boosts(difficulty)
+
 
         background = pygame.image.load("assets/sprites/game_sprites/background.png").convert()
         background_width = background.get_width()
