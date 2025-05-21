@@ -186,74 +186,40 @@ class MainGame:
     def options(self):
         screen_run = True
 
-        BACK_BUTTON = Button(
-            image=pygame.image.load("assets/sprites/menu_sprites/Play Rect.png"),
-            pos=(self.WIDTH // 2, 500),
-            text_input="BACK",
-            font=get_font(60),
-            base_color="#1C86E5",
-            hovering_color="White"
-        )
+        BACK_BUTTON = self.create_button("BACK", (self.WIDTH // 2, 500), font_size=60, img_path="assets/sprites/menu_sprites/Play Rect.png", base_color="#1C86E5")
 
-        RES_800x600 = Button(
-            image=pygame.image.load("assets/sprites/menu_sprites/Options Rect.png"),
-            pos=(self.WIDTH // 2, 150),
-            text_input="800x600",
-            font=get_font(40),
-            base_color="#FFD700",
-            hovering_color="White"
-        )
-
-        RES_1024x768 = Button(
-            image=pygame.image.load("assets/sprites/menu_sprites/Options Rect.png"),
-            pos=(self.WIDTH // 2, 250),
-            text_input="1024x768",
-            font=get_font(40),
-            base_color="#FFD700",
-            hovering_color="White"
-        )
-
-        RES_1280x720 = Button(
-            image=pygame.image.load("assets/sprites/menu_sprites/Options Rect.png"),
-            pos=(self.WIDTH // 2, 350),
-            text_input="1280x720",
-            font=get_font(40),
-            base_color="#FFD700",
-            hovering_color="White"
-        )
+        RES_BUTTONS = [
+            self.create_button("800x600", (self.WIDTH // 2, 150)),
+            self.create_button("1024x768", (self.WIDTH // 2, 250)),
+            self.create_button("1280x720", (self.WIDTH // 2, 350))
+        ]
 
         while screen_run:
+            self.SCREEN.blit(self.scaled_background, (0, 0))
             MOUSE_POS = pygame.mouse.get_pos()
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if BACK_BUTTON.checkForInput(MOUSE_POS):
                         self.menu_pop_btn_sfx.play()
                         return
+                    for btn in RES_BUTTONS:
+                        if btn.checkForInput(MOUSE_POS):
+                            width, height = map(int, btn.text_input.split('x'))
+                            self.change_resolution(width, height)
+                            self.menu_pop_btn_sfx.play()
+                            return
 
-                    if RES_800x600.checkForInput(MOUSE_POS):
-                        self.change_resolution(800, 600)
-                        return
-
-                    if RES_1024x768.checkForInput(MOUSE_POS):
-                        self.change_resolution(1024, 768)
-                        return
-
-                    if RES_1280x720.checkForInput(MOUSE_POS):
-                        self.change_resolution(1280, 720)
-                        return
-
-            self.SCREEN.fill((255, 255, 255))
-            for button in [RES_800x600, RES_1024x768, RES_1280x720, BACK_BUTTON]:
-                button.changeColor(MOUSE_POS)
-                button.update(self.SCREEN)
+            for btn in RES_BUTTONS + [BACK_BUTTON]:
+                btn.changeColor(MOUSE_POS)
+                btn.update(self.SCREEN)
 
             pygame.display.update()
             self.clock.tick(60)
+
 
     def menu(self):
 
@@ -330,3 +296,14 @@ class MainGame:
             self.scaled_background = pygame.transform.smoothscale(
                 list(self.menu_backgrounds.values())[0], (width, height)
             )
+
+    def create_button(self, text, pos, font_size=40, img_path="assets/sprites/menu_sprites/Options Rect.png", base_color="#FFD700", hover_color="White"):
+        return Button(
+            image=pygame.image.load(img_path),
+            pos=pos,
+            text_input=text,
+            font=get_font(font_size),
+            base_color=base_color,
+            hovering_color=hover_color
+        )
+
