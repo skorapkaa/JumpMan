@@ -35,8 +35,14 @@ class MainGame:
         self.menu_song = pygame.mixer.Sound("assets/music/Oceania.mp3")
         self.menu_song.set_volume(0.05)
 
+        self.game_song = pygame.mixer.Sound("assets/music/time_for_adventure.mp3")
+        self.game_song.set_volume(0.05)
+
         self.power_up = pygame.mixer.Sound("assets/sounds/power_up.wav")
         self.power_up.set_volume(0.2)
+
+        self.lift_sound = pygame.mixer.Sound("assets/sounds/lift_sound.mp3")
+        self.lift_sound.set_volume(0.05)
 
         self.menu_backgrounds = {
             (800, 600): pygame.transform.scale(
@@ -87,6 +93,7 @@ class MainGame:
 
         self.menu_birds_sfx.stop()
         self.menu_birds_sfx.play(loops=-1)
+        self.game_song.play(loops=-1)
 
         RETURN_BUTTON = Button(
             image=pygame.image.load("assets/sprites/menu_sprites/Options Rect.png"),
@@ -110,6 +117,7 @@ class MainGame:
                     if RETURN_BUTTON.checkForInput(pygame.mouse.get_pos()):
                         self.menu_pop_btn_sfx.play()
                         self.menu_birds_sfx.stop()
+                        self.game_song.stop()
                         return  # návrat do menu
 
             if not paused:
@@ -150,6 +158,9 @@ class MainGame:
                     self.coin_grab.play()
                     item_rects.remove(coin)
                     score += 1
+
+                    if score == 15:
+                        self.lift_sound.play()
                 else:
                     self.SCREEN.blit(item_texture, (coin.x - scroll_x, coin.y))
 
@@ -162,16 +173,22 @@ class MainGame:
                 else:
                     self.SCREEN.blit(boost_texture, (boost.x - scroll_x, boost.y))
 
+
             for lift_rect in lift_rects:
-                if score == 2:
+                if score == 15:
                     self.SCREEN.blit(lift_texture_open, (lift_rect.x - scroll_x, lift_rect.y))
-                    # Kontrola kolize s výtahem, když je otevřený
                     if player.get_rect().colliderect(lift_rect):
                         print("konec")
+                        final_text = get_font(150).render("YOU WON!", True, "#FFA600")
+                        final_rect = final_text.get_rect(center=(self.WIDTH // 2, self.HEIGHT//2))
+                        self.SCREEN.blit(final_text, final_rect)
+                        pygame.display.update()
+                        pygame.time.wait(2000)
                         self.menu_birds_sfx.stop()
+                        self.game_song.stop()
                         return
                 else:
-                    self.SCREEN.blit(lift_texture_closed, (lift_rect.x - scroll_x, lift_rect.y))        
+                    self.SCREEN.blit(lift_texture_closed, (lift_rect.x - scroll_x, lift_rect.y))   
 
             # Vykreslení hráče
             player.draw(self.SCREEN, scroll_x)
