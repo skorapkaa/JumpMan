@@ -63,7 +63,7 @@ class MainGame:
 
         ground_rects = terrain_data["ground_rects"]
         platform_rects = terrain_data["platform_rects"]
-        item_rects, boost_rects = items.get_items_and_boosts(difficulty)
+        item_rects, boost_rects = items.get_items_and_boosts(difficulty, self.WIDTH, self.HEIGHT)
 
         background = pygame.image.load("assets/sprites/game_sprites/background.png").convert()
         background_width = background.get_width()
@@ -118,7 +118,7 @@ class MainGame:
                 terrain_data = terrain.get_map(difficulty)
                 ground_rects = terrain_data["ground_rects"]
                 platform_rects = terrain_data["platform_rects"]
-                item_rects, boost_rects = items.get_items_and_boosts(difficulty)
+                item_rects, boost_rects = items.get_items_and_boosts(difficulty, self.WIDTH, self.HEIGHT)
                 score = 0
 
             scroll_x = max(0, min(player.x - self.WIDTH // 2, background_width - self.WIDTH))

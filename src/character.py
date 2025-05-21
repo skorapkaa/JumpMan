@@ -65,7 +65,8 @@ class Character:
         player_rect = self.get_rect()
         prev_bottom = player_rect.bottom - self.velocity_y
 
-        # Kolize na osu Y
+        # Kolize na osu Y (vylepšená detekce "on_ground" na hraně)
+        ground_check_rect = player_rect.inflate(8, 0)  # rozšíříme kolizní obdélník o 8px do stran
         for rect in terrain:
             if player_rect.colliderect(rect):
                 if prev_bottom <= rect.top + 10:
