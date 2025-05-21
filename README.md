@@ -36,30 +36,6 @@ platformy, vyhýbat se překážkám a překonávat propasti v cestě.
    ```
    python src/main.py
    ```
-
-## Struktura projektu
-
-- **assets/**: Obsahuje všechny herní assety
-    - **fonts/**: Herní písma
-    - **music/**: Hudba na pozadí
-    - **sounds/**: Zvukové efekty
-    - **sprites/**: Grafika hry
-- **src/**: Zdrojový kód hry
-    - **main.py**: Vstupní bod aplikace
-    - **maingame.py**: Hlavní herní smyčka a menu
-    - **character.py**: Třída pro základní charakter
-    - **player.py**: Třída pro hráče (dědí z Character)
-    - **enemy.py**: Třída pro nepřátele
-    - **terrain.py**: Definice herního terénu a map
-    - **items.py**: Herní předměty
-    - **button.py**: Tlačítka pro menu
-
-## Vývojáři
-
-- Pavel Hrdina
-- David Chvátal
-- Jan Linhart
-
 ---
 *Vytvořeno s využitím knihovny Pygame*
 
