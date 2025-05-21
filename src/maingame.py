@@ -117,8 +117,7 @@ class MainGame:
                 terrain_data = terrain.get_map(difficulty)
                 ground_rects = terrain_data["ground_rects"]
                 platform_rects = terrain_data["platform_rects"]
-                item_rects = terrain_data["items"]
-                boost_rects = terrain_data["boosts"]
+                item_rects, boost_rects = items.get_items_and_boosts(difficulty)
                 score = 0
 
             scroll_x = max(0, min(player.x - self.WIDTH // 2, background_width - self.WIDTH))
