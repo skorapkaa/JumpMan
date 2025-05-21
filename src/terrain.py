@@ -28,6 +28,10 @@ class Terrain:
                     pygame.Rect(1450, platform_y[9], 100, platform_height),
                     pygame.Rect(1600, platform_y[10], 200, platform_height),
                 ],
+
+                "lift": [
+                    pygame.Rect(200, ground_y-127, 60, 80)
+                ]
             },
         }
 

@@ -64,6 +64,7 @@ class MainGame:
         ground_rects = terrain_data["ground_rects"]
         platform_rects = terrain_data["platform_rects"]
         item_rects, boost_rects = items.get_items_and_boosts(difficulty, self.WIDTH, self.HEIGHT)
+        lift_rects = terrain_data.get("lift", [])
 
         background = pygame.image.load("assets/sprites/game_sprites/background.png").convert()
         background_width = background.get_width()
@@ -78,6 +79,11 @@ class MainGame:
 
         boost_texture = pygame.image.load("assets/sprites/game_sprites/boost.png").convert_alpha()
         boost_texture = pygame.transform.scale(boost_texture, (32, 32))
+
+        lift_texture_open = pygame.image.load("assets/sprites/game_sprites/lift_open.png").convert_alpha()
+        lift_texture_open = pygame.transform.scale(lift_texture_open, (128, 128))
+        lift_texture_closed = pygame.image.load("assets/sprites/game_sprites/lift_closed.png").convert_alpha()
+        lift_texture_closed = pygame.transform.scale(lift_texture_closed, (128, 128))
 
         self.menu_birds_sfx.stop()
         self.menu_birds_sfx.play(loops=-1)
@@ -124,22 +130,21 @@ class MainGame:
             scroll_x = max(0, min(player.x - self.WIDTH // 2, background_width - self.WIDTH))
             self.SCREEN.blit(background, (-scroll_x, 0))
 
-            # Vykreslení země (ground sprite je natažen pouze na výšku, šířka je dlaždicovaná)
+            #Vykreslení země
             for rect in ground_rects:
                 tile_width = ground_texture.get_width()
                 tiles_x = rect.width // tile_width + 1
                 for x in range(tiles_x):
-                    # Stretch only in Y, keep original width
                     stretched_ground = pygame.transform.scale(ground_texture, (tile_width, rect.height))
                     pos_x = rect.x + x * tile_width - scroll_x
                     self.SCREEN.blit(stretched_ground, (pos_x, rect.y))
 
-            # Vykreslení platforem
+            #Vykreslení platforem
             for rect in platform_rects:
                 platform_texture = pygame.transform.scale(platform_texture_original, (rect.width, rect.height))
                 self.SCREEN.blit(platform_texture, (rect.x - scroll_x, rect.y))
 
-            # Vykreslení mincí a podminka pro jejich sebrani
+            #Vykreslení mincí
             for coin in item_rects[:]:
                 if player.get_rect().colliderect(coin):
                     self.coin_grab.play()
@@ -148,7 +153,7 @@ class MainGame:
                 else:
                     self.SCREEN.blit(item_texture, (coin.x - scroll_x, coin.y))
 
-            # Vykresleni boostu
+            #Vykresleni boostu
             for boost in boost_rects:
                 if player.get_rect().colliderect(boost):
                     boost_rects.remove(boost)
@@ -156,6 +161,17 @@ class MainGame:
                     player.jump_boost_end_time = pygame.time.get_ticks() + 5000  # boost na 5 sekund
                 else:
                     self.SCREEN.blit(boost_texture, (boost.x - scroll_x, boost.y))
+
+            for lift_rect in lift_rects:
+                if score == 2:
+                    self.SCREEN.blit(lift_texture_open, (lift_rect.x - scroll_x, lift_rect.y))
+                    # Kontrola kolize s výtahem, když je otevřený
+                    if player.get_rect().colliderect(lift_rect):
+                        print("konec")
+                        self.menu_birds_sfx.stop()
+                        return
+                else:
+                    self.SCREEN.blit(lift_texture_closed, (lift_rect.x - scroll_x, lift_rect.y))        
 
             # Vykreslení hráče
             player.draw(self.SCREEN, scroll_x)
