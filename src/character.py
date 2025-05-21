@@ -84,15 +84,18 @@ class Character:
         # Aktualizace animace
         self.update_animation()
 
-    def move(self, direction, screen_width=800, offset_x=0):
-        max_x_on_screen = offset_x + screen_width - 40
+    def move(self, direction, screen_width=800, offset_x=0, background_width=2400):
+        max_x_global = background_width - 40  # 40 = šířka hráče
+
         if direction == "left" and self.x > 0:
             self.velocity_x = -self.speed
             self.facing_right = False
         elif direction == "right":
-            if self.x + self.speed < max_x_on_screen:
+            if self.x + self.speed < max_x_global:
                 self.velocity_x = self.speed
                 self.facing_right = True
+            else:
+                self.velocity_x = 0  # zabrání pohybu za pravý okraj
         else:
             self.velocity_x = 0
 

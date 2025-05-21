@@ -5,8 +5,7 @@ class Terrain:
     def __init__(self, screen_width, screen_height):
         ground_height = int(screen_height * 0.24)
         ground_y = screen_height - ground_height
-        platform_height = int(screen_height * 0.021)  # 15/720 ~ 0.021
-        # Platform y-positions as a proportion of screen height
+        platform_height = int(screen_height * 0.021)
         platform_ys = [0.65, 0.56, 0.46, 0.36, 0.25, 0.46, 0.36, 0.25, 0.60, 0.65, 0.56]
         platform_y = [int(screen_height * h) for h in platform_ys]
         self.maps = {

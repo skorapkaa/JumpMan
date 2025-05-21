@@ -87,7 +87,7 @@ class MainGame:
             pos=(self.WIDTH // 2, 300),
             text_input="RETURN TO MENU",
             font=get_font(40),
-            base_color="#1C86E5",
+            base_color="#CDE3F7",
             hovering_color="White"
         )
 
@@ -107,7 +107,7 @@ class MainGame:
                         return  # návrat do menu
 
             if not paused:
-                player.handle_input(offset_x=scroll_x, screen_width=self.WIDTH)
+                player.handle_input(offset_x=scroll_x, screen_width=self.WIDTH, background_width=background_width)
                 player.update(ground_rects + platform_rects)
 
             if not player.alive:
@@ -174,7 +174,7 @@ class MainGame:
 
             # Pauza
             if paused:
-                pause_text = get_font(80).render("PAUSED", True, "#FF0000")
+                pause_text = get_font(80).render("PAUSED", True, "#04049B")
                 pause_rect = pause_text.get_rect(center=(self.WIDTH // 2, 150))
                 self.SCREEN.blit(pause_text, pause_rect)
 
