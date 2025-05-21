@@ -2,7 +2,6 @@ import pygame
 
 class Items:
     def __init__(self):
-        # Store item positions as (x, y) proportions of width/height
         self.item_data = {
             "medium": {
                 "coins": [
