@@ -30,7 +30,7 @@ class Terrain:
                 ],
 
                 "lift": [
-                    pygame.Rect(200, ground_y-127, 60, 80)
+                    pygame.Rect(2150, ground_y-125, 70, 80)
                 ]
             },
         }
