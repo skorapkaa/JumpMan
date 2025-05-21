@@ -2,32 +2,35 @@ import pygame
 
 class Items:
     def __init__(self):
+        # Store item positions as (x, y) proportions of width/height
         self.item_data = {
             "medium": {
                 "coins": [
-                    pygame.Rect(182, 430, 16, 16),
-                    pygame.Rect(332, 360, 16, 16),
-                    pygame.Rect(482, 290, 16, 16),
-                    pygame.Rect(632, 220, 16, 16),
-                    pygame.Rect(232, 140, 16, 16),
-                    pygame.Rect(832, 140, 16, 16),
-                    pygame.Rect(1482, 290, 16, 16),
-                    pygame.Rect(600, 500, 16, 16),
-                    pygame.Rect(700, 500, 16, 16),
-                    pygame.Rect(1200, 500, 16, 16),
-                    pygame.Rect(1300, 500, 16, 16),
-                    pygame.Rect(1400, 500, 16, 16),
-                    pygame.Rect(1900, 500, 16, 16),
-                    pygame.Rect(2000, 500, 16, 16),
-                    pygame.Rect(2100, 500, 16, 16),
+                    (182, 0.597),
+                    (332, 0.5),
+                    (482, 0.403),
+                    (632, 0.306),
+                    (232, 0.194),
+                    (832, 0.194),
+                    (1482, 0.403),
+                    (600, 0.694),
+                    (700, 0.694),
+                    (1200, 0.694),
+                    (1300, 0.694),
+                    (1400, 0.694),
+                    (1900, 0.694),
+                    (2000, 0.694),
+                    (2100, 0.694),
                 ],
                 "boosts": [
-                    pygame.Rect(1332, 220, 16, 16),
+                    (1332, 0.306),
                 ]
             }
         }
 
-    def get_items_and_boosts(self, difficulty):
+    def get_items_and_boosts(self, difficulty, screen_width=1280, screen_height=720):
         difficulty = difficulty.lower()
         data = self.item_data.get(difficulty, self.item_data["medium"])
-        return data["coins"].copy(), data["boosts"].copy()
+        coins = [pygame.Rect(x, int(screen_height * y), 16, 16) for x, y in data["coins"]]
+        boosts = [pygame.Rect(x, int(screen_height * y), 16, 16) for x, y in data["boosts"]]
+        return coins, boosts
