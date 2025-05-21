@@ -5,9 +5,9 @@ class Terrain:
         self.maps = {
             "medium": {
                 "ground_rects": [
-                    pygame.Rect(0, 550, 800, 50),         # země do x = 800
+                    pygame.Rect(0, 550, 750, 50),         # země do x = 800
                     # díra mezi 800 a 1000
-                    pygame.Rect(1000, 550, 600, 50),      # země od x = 1000 do 1600
+                    pygame.Rect(1000, 550, 550, 50),      # země od x = 1000 do 1600
                     # díra mezi 1600 a 1800
                     pygame.Rect(1800, 550, 800, 50),  
 
@@ -41,7 +41,6 @@ class Terrain:
                     #Coiny na zemi
                     pygame.Rect(600, 500, 16, 16),
                     pygame.Rect(700, 500, 16, 16),
-                    pygame.Rect(800, 500, 16, 16),
                     pygame.Rect(1200, 500, 16, 16),
                     pygame.Rect(1300, 500, 16, 16),
                     pygame.Rect(1400, 500, 16, 16), 
