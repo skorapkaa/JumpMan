@@ -174,7 +174,7 @@ class MainGame:
 
             # Pauza
             if paused:
-                pause_text = get_font(80).render("PAUSED", True, "#FF0000")
+                pause_text = get_font(80).render("PAUSED", True, "#04049B")
                 pause_rect = pause_text.get_rect(center=(self.WIDTH // 2, 150))
                 self.SCREEN.blit(pause_text, pause_rect)
                 RETURN_BUTTON.changeColor(pygame.mouse.get_pos())
