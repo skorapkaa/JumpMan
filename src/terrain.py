@@ -29,27 +29,6 @@ class Terrain:
                     pygame.Rect(1450, platform_y[9], 100, platform_height),
                     pygame.Rect(1600, platform_y[10], 200, platform_height),
                 ],
-                "items": [
-                    pygame.Rect(182, int(screen_height * 0.60), 16, 16),
-                    pygame.Rect(332, int(screen_height * 0.50), 16, 16),
-                    pygame.Rect(482, int(screen_height * 0.40), 16, 16),
-                    pygame.Rect(632, int(screen_height * 0.30), 16, 16),
-                    pygame.Rect(232, int(screen_height * 0.19), 16, 16),
-                    pygame.Rect(832, int(screen_height * 0.19), 16, 16),
-                    pygame.Rect(1482, int(screen_height * 0.40), 16, 16),
-                    pygame.Rect(600, int(screen_height * 0.70), 16, 16),
-                    pygame.Rect(700, int(screen_height * 0.70), 16, 16),
-                    pygame.Rect(800, int(screen_height * 0.70), 16, 16),
-                    pygame.Rect(1200, int(screen_height * 0.70), 16, 16),
-                    pygame.Rect(1300, int(screen_height * 0.70), 16, 16),
-                    pygame.Rect(1400, int(screen_height * 0.70), 16, 16),
-                    pygame.Rect(1900, int(screen_height * 0.70), 16, 16),
-                    pygame.Rect(2000, int(screen_height * 0.70), 16, 16),
-                    pygame.Rect(2100, int(screen_height * 0.70), 16, 16),
-                ],
-                "boosts": [
-                    pygame.Rect(1332, int(screen_height * 0.30), 16, 16),
-                ],
             },
         }
 

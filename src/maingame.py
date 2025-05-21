@@ -6,6 +6,7 @@ import pygame
 from button import Button
 from player import Player
 from terrain import Terrain
+from items import Items
 
 os.environ['SDL_VIDEO_CENTERED'] = '1'  # toto nam umozni menit rozliseni bez pohybu okna
 
@@ -56,13 +57,13 @@ class MainGame:
         paused = False
         player = Player()
         terrain = Terrain(self.WIDTH, self.HEIGHT)
+        items = Items()
         terrain_data = terrain.get_map(difficulty)
         score = 0
 
         ground_rects = terrain_data["ground_rects"]
         platform_rects = terrain_data["platform_rects"]
-        item_rects = terrain_data["items"]
-        boost_rects = terrain_data["boosts"]
+        item_rects, boost_rects = items.get_items_and_boosts(difficulty)
 
         background = pygame.image.load("assets/sprites/game_sprites/background.png").convert()
         background_width = background.get_width()
@@ -113,11 +114,11 @@ class MainGame:
                 pygame.time.wait(500)
                 player = Player()
                 terrain = Terrain(self.WIDTH, self.HEIGHT)
+                items = Items()
                 terrain_data = terrain.get_map(difficulty)
                 ground_rects = terrain_data["ground_rects"]
                 platform_rects = terrain_data["platform_rects"]
-                item_rects = terrain_data["items"]
-                boost_rects = terrain_data["boosts"]
+                item_rects, boost_rects = items.get_items_and_boosts(difficulty)
                 score = 0
 
             scroll_x = max(0, min(player.x - self.WIDTH // 2, background_width - self.WIDTH))
