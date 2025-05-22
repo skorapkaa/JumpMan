@@ -1,0 +1,57 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set timestamp
+        id: vars
+        run: echo "TIMESTAMP=$(date +%Y%m%d_%H%M%S)" >> $GITHUB_ENV
+
+      - name: Clean __pycache__ folders
+        run: find . -name "__pycache__" -type d -exec rm -r {} +
+
+      - name: Remove dev files from venv
+        run: |
+          rm -rf venv/lib/python*/site-packages/pip
+          rm -rf venv/lib/python*/site-packages/setuptools
+          rm -rf venv/share
+          rm -rf venv/include
+
+      - name: Create dist directory
+        run: mkdir -p dist
+
+      - name: Create tar.gz archive
+        run: |
+          PACKAGE_NAME="game_package_${TIMESTAMP}"
+          tar --warning=no-file-changed \
+              --exclude='./dist' \
+              --exclude='./*.tar.gz' \
+              --exclude='./*.zip' \
+              --exclude='./.git' \
+              --exclude='./__pycache__' \
+              -czf "dist/$PACKAGE_NAME.tar.gz" .
+
+      - name: Create zip archive
+        run: |
+          PACKAGE_NAME="game_package_${TIMESTAMP}"
+          zip -r "dist/$PACKAGE_NAME.zip" . \
+              -x "dist/*" "*.tar.gz" "*.zip" ".git/*" "__pycache__/*"
+
+      - name: List dist contents
+        run: ls -lh dist
+
+      - name: Create GitHub Release with artifacts
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "dist/*.tar.gz,dist/*.zip"
