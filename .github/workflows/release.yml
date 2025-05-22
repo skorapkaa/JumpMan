@@ -1,47 +1,50 @@
-name: Release and Package Python Game
-
-on:
-  push:
-    tags:
-      - 'v*'   # Trigger on version tags like v1.0.0
-
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
+      - name: Set timestamp
+        id: vars
+        run: echo "TIMESTAMP=$(date +%Y%m%d_%H%M%S)" >> $GITHUB_ENV
 
-      - name: Install dependencies
+      - name: Clean __pycache__ folders
+        run: find . -name "__pycache__" -type d -exec rm -r {} +
+
+      - name: Remove dev files from venv
         run: |
-          python -m venv venv
-          source venv/bin/activate
-          pip install --upgrade pip
-          pip install -r requirements.txt
+          rm -rf venv/lib/python*/site-packages/pip
+          rm -rf venv/lib/python*/site-packages/setuptools
+          rm -rf venv/share
+          rm -rf venv/include
 
-      - name: Make packaging script executable
-        run: chmod +x package_game.sh
+      - name: Create dist directory
+        run: mkdir -p dist
 
-      - name: Run packaging script
-        run: ./package_game.sh
+      - name: Create tar.gz archive
+        run: |
+          PACKAGE_NAME="game_package_${TIMESTAMP}"
+          tar --warning=no-file-changed \
+              --exclude='./dist' \
+              --exclude='./*.tar.gz' \
+              --exclude='./*.zip' \
+              --exclude='./.git' \
+              --exclude='./__pycache__' \
+              -czf "dist/$PACKAGE_NAME.tar.gz" .
 
-      - name: Create GitHub Release
-        id: create_release
-        uses: softprops/action-gh-release@v2
+      - name: Create zip archive
+        run: |
+          PACKAGE_NAME="game_package_${TIMESTAMP}"
+          zip -r "dist/$PACKAGE_NAME.zip" . \
+              -x "dist/*" "*.tar.gz" "*.zip" ".git/*" "__pycache__/*"
+
+      - name: List dist contents
+        run: ls -lh dist
+
+      - name: Create GitHub Release with artifacts
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ github.ref_name }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload Release Assets
-        uses: softprops/action-gh-release@v2
-        with:
-          files: dist/*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          artifacts: "dist/*.tar.gz,dist/*.zip"
