@@ -1,18 +1,22 @@
 import pygame
+from pygame import Rect
+
 
 class Character:
     def __init__(self):
         self.alive: bool = True
+        self.x: int
+        self.y: int
         self.x, self.y = 100, 400
-        self.speed = 5
-        self.velocity_x: float = 0.0 # později, je nutne, aby byla rychlost typu float
+        self.speed: int = 5
+        self.velocity_x: float = 0.0  # později, je nutne, aby byla rychlost typu float
         self.velocity_y: float = 0.0
         self.gravity: float = 0.5
-        self.on_ground = False
-        self.facing_right = True
+        self.on_ground: bool = False
+        self.facing_right: bool = True
 
-        self.frame_index = 0.0 # používáme float pro plynulejší animaci protože se bude zvyšovat o desetiny
-        self.animation_speed = 0.03
+        self.frame_index: float = 0.0  # používáme float pro plynulejší animaci protože se bude zvyšovat o desetiny
+        self.animation_speed: float = 0.03
 
         # Sprity - chodící animace pouze pro pravou stranu
         self.walk_right_frames = [
@@ -40,11 +44,11 @@ class Character:
             flipped_image = pygame.transform.flip(self.image, True, False)
             screen.blit(flipped_image, (self.x - offset_x, self.y))
 
-    def get_rect(self):
+    def get_rect(self) -> Rect:
         # Většina snímků má velikost 40x60
         return pygame.Rect(self.x, self.y, 40, 60)
 
-    def update(self, terrain):
+    def update(self, terrain) -> None:
         self.on_ground = False
         self.x += int(self.velocity_x)
         player_rect = self.get_rect()
@@ -98,7 +102,7 @@ class Character:
         else:
             self.velocity_x = 0
 
-    def update_animation(self):
+    def update_animation(self) -> None:
         if self.velocity_x > 0:
             # Chůze doprava
             self.frame_index += self.animation_speed # znovu nutná konverze na int
