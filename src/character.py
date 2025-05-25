@@ -2,16 +2,16 @@ import pygame
 
 class Character:
     def __init__(self):
-        self.alive = True
+        self.alive: bool = True
         self.x, self.y = 100, 400
         self.speed = 5
-        self.velocity_x = 0
-        self.velocity_y = 0
-        self.gravity = 0.5
+        self.velocity_x: float = 0.0 # později, je nutne, aby byla rychlost typu float
+        self.velocity_y: float = 0.0
+        self.gravity: float = 0.5
         self.on_ground = False
         self.facing_right = True
 
-        self.frame_index = 0
+        self.frame_index = 0.0 # používáme float pro plynulejší animaci protože se bude zvyšovat o desetiny
         self.animation_speed = 0.03
 
         # Sprity - chodící animace pouze pro pravou stranu
@@ -32,7 +32,7 @@ class Character:
         self.idle_animation_speed = 0.02  # rychlost animace stání
         self.idle_animation_timer = 0
 
-    def draw(self, screen, offset_x=0):
+    def draw(self, screen, offset_x = 0) -> None:
         # Pokud postava čelí doleva, otočíme obrázek horizontálně
         if self.facing_right:
             screen.blit(self.image, (self.x - offset_x, self.y))
@@ -46,7 +46,7 @@ class Character:
 
     def update(self, terrain):
         self.on_ground = False
-        self.x += self.velocity_x
+        self.x += int(self.velocity_x)
         player_rect = self.get_rect()
 
         # Kolize na osu X
@@ -60,13 +60,12 @@ class Character:
                 player_rect = self.get_rect()
 
         # Gravitační efekt a pohyb na ose Y
-        self.velocity_y += self.gravity
-        self.y += self.velocity_y
+        self.velocity_y += self.gravity # tady už je float, takže není potřeba konverze
+        self.y += int(self.velocity_y) # převádíme rychlost na celé číslo, je nutná konverze na int
         player_rect = self.get_rect()
         prev_bottom = player_rect.bottom - self.velocity_y
 
         # Kolize na osu Y (vylepšená detekce "on_ground" na hraně)
-        ground_check_rect = player_rect.inflate(8, 0)  # rozšíříme kolizní obdélník o 8px do stran
         for rect in terrain:
             if player_rect.colliderect(rect):
                 if prev_bottom <= rect.top + 10:
@@ -84,7 +83,7 @@ class Character:
         # Aktualizace animace
         self.update_animation()
 
-    def move(self, direction, screen_width=800, offset_x=0, background_width=2400):
+    def move(self, direction: int, background_width: int = 2400) -> None:
         max_x_global = background_width - 40  # 40 = šířka hráče
 
         if direction == "left" and self.x > 0:
@@ -102,7 +101,7 @@ class Character:
     def update_animation(self):
         if self.velocity_x > 0:
             # Chůze doprava
-            self.frame_index += self.animation_speed
+            self.frame_index += self.animation_speed # znovu nutná konverze na int
             if self.frame_index >= len(self.walk_right_frames):
                 self.frame_index = 0
             self.image = self.walk_right_frames[int(self.frame_index)]
@@ -111,7 +110,7 @@ class Character:
 
         elif self.velocity_x < 0:
             # Chůze doleva (stejné snímky jako doprava, jen se při vykreslení otočí)
-            self.frame_index += self.animation_speed
+            self.frame_index += self.animation_speed # znovu nutná konverze na int, sorry za to
             if self.frame_index >= len(self.walk_right_frames):
                 self.frame_index = 0
             self.image = self.walk_right_frames[int(self.frame_index)]
@@ -120,7 +119,7 @@ class Character:
 
         else:
             # Stání - animace pohupování mezi dvěma snímky
-            self.idle_animation_timer += self.idle_animation_speed
+            self.idle_animation_timer += int(self.idle_animation_speed) # ...
             if self.idle_animation_timer >= 1:
                 self.idle_animation_timer = 0
                 self.idle_frame_index = (self.idle_frame_index + 1) % len(self.idle_right_frames)

@@ -9,9 +9,9 @@ class Player(Character):
     def handle_input(self, offset_x=0, screen_width=800, background_width=2400):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
-            self.move("left", screen_width, offset_x, background_width)
+            self.move("left", background_width)
         elif keys[pygame.K_RIGHT]:
-            self.move("right", screen_width, offset_x, background_width)
+            self.move("right", background_width)
         else:
             self.velocity_x = 0
 

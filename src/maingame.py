@@ -114,7 +114,7 @@ class MainGame:
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     paused = not paused
                 if paused and event.type == pygame.MOUSEBUTTONDOWN:
-                    if RETURN_BUTTON.checkForInput(pygame.mouse.get_pos()):
+                    if RETURN_BUTTON.check_for_input(pygame.mouse.get_pos()):
                         self.menu_pop_btn_sfx.play()
                         self.menu_birds_sfx.stop()
                         self.game_song.stop()
@@ -211,7 +211,7 @@ class MainGame:
                 pause_rect = pause_text.get_rect(center=(self.WIDTH // 2, 150))
                 self.SCREEN.blit(pause_text, pause_rect)
 
-                RETURN_BUTTON.changeColor(pygame.mouse.get_pos())
+                RETURN_BUTTON.change_color(pygame.mouse.get_pos())
                 RETURN_BUTTON.update(self.SCREEN)
 
             pygame.display.update()
@@ -237,18 +237,18 @@ class MainGame:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if BACK_BUTTON.checkForInput(MOUSE_POS):
+                    if BACK_BUTTON.check_for_input(MOUSE_POS):
                         self.menu_pop_btn_sfx.play()
                         return
                     for btn in RES_BUTTONS:
-                        if btn.checkForInput(MOUSE_POS):
+                        if btn.check_for_input(MOUSE_POS):
                             width, height = map(int, btn.text_input.split('x'))
                             self.change_resolution(width, height)
                             self.menu_pop_btn_sfx.play()
                             return
 
             for btn in RES_BUTTONS + [BACK_BUTTON]:
-                btn.changeColor(MOUSE_POS)
+                btn.change_color(MOUSE_POS)
                 btn.update(self.SCREEN)
 
             pygame.display.update()
@@ -295,7 +295,7 @@ class MainGame:
             )
 
             for button in [PLAY_BUTTON, OPTIONS_BUTTON, QUIT_BUTTON]:
-                button.changeColor(MENU_MOUSE_POS)
+                button.change_color(MENU_MOUSE_POS)
                 button.update(self.SCREEN)
 
             for event in pygame.event.get():
@@ -303,15 +303,15 @@ class MainGame:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    if PLAY_BUTTON.check_for_input(MENU_MOUSE_POS):
                         self.menu_pop_btn_sfx.play()
                         self.menu_song.stop()
                         self.play()
                         self.menu_song.play(loops=-1)
-                    if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    if OPTIONS_BUTTON.check_for_input(MENU_MOUSE_POS):
                         self.menu_pop_btn_sfx.play()
                         self.options()
-                    if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    if QUIT_BUTTON.check_for_input(MENU_MOUSE_POS):
                         pygame.quit()
                         sys.exit()
 
