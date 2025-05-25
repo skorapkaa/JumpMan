@@ -5,7 +5,7 @@ from pygame import Rect
 
 
 class Terrain:
-    def __init__(self, screen_width, screen_height):
+    def __init__(self, self_width, screen_height):
         ground_height = int(screen_height * 0.24)
         ground_y = screen_height - ground_height
         platform_height = int(screen_height * 0.021)

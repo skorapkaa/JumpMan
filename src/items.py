@@ -1,5 +1,6 @@
 import pygame
 
+
 class Items:
     def __init__(self):
         self.item_data = {
@@ -23,13 +24,17 @@ class Items:
                 ],
                 "boosts": [
                     (1332, 0.306),
-                ]
+                ],
             }
         }
 
     def get_items_and_boosts(self, difficulty, screen_width=1280, screen_height=720):
         difficulty = difficulty.lower()
         data = self.item_data.get(difficulty, self.item_data["medium"])
-        coins = [pygame.Rect(x, int(screen_height * y), 16, 16) for x, y in data["coins"]]
-        boosts = [pygame.Rect(x, int(screen_height * y), 16, 16) for x, y in data["boosts"]]
+        coins = [
+            pygame.Rect(x, int(screen_height * y), 16, 16) for x, y in data["coins"]
+        ]
+        boosts = [
+            pygame.Rect(x, int(screen_height * y), 16, 16) for x, y in data["boosts"]
+        ]
         return coins, boosts
