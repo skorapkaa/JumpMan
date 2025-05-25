@@ -22,7 +22,7 @@ class Player(Character):
         if keys[pygame.K_SPACE] or keys[pygame.K_UP]:
             self.jump()
 
-    def jump(self):
+    def jump(self) -> None:
         current_time = pygame.time.get_ticks()
         if self.on_ground:
             if current_time < self.jump_boost_end_time:
@@ -31,7 +31,7 @@ class Player(Character):
                 self.velocity_y = -10
             self.on_ground = False
 
-    def check_collisions(self, items, terrain):
+    def check_collisions(self, items) -> None:
         # remove check collisions with terrain that is not implemented in this class thus fixing a bug
         # where player would fall of the edge of the terrain
         for item in items:

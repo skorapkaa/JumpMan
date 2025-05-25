@@ -1,4 +1,7 @@
+from typing import Any
+
 import pygame
+from pygame import Rect
 
 
 class Terrain:
@@ -28,13 +31,15 @@ class Terrain:
                     pygame.Rect(1450, platform_y[9], 100, platform_height),
                     pygame.Rect(1600, platform_y[10], 200, platform_height),
                 ],
-
-                "lift": [
-                    pygame.Rect(2150, ground_y-125, 70, 80)
-                ]
+                "lift": [pygame.Rect(2150, ground_y - 125, 70, 80)],
             },
         }
 
-    def get_map(self, difficulty):
+    def get_map(
+            self, difficulty
+    ) -> (
+            dict[str, list[Rect] | list[Rect | Any]]
+            | dict[str, list[Rect] | list[Rect | Any]]
+    ):
         difficulty = difficulty.lower()
         return self.maps.get(difficulty, self.maps["medium"])
